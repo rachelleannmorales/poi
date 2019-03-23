@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from './services/api.service';
 import {PointOfInterest} from './models/pointOfInterest';
-import {forEach} from '@angular/router/src/utils/collection';
 
 declare var ol: any;
 @Component({
@@ -60,15 +59,15 @@ export class AppComponent implements OnInit {
     }
 
     setCenter(latitude, longitude) {
-        const coords = ol.proj.fromLonLat([longitude, latitude]);
-        this.map.getView().animate({center: coords, zoom: 8});
+        const coords = ol.proj.fromLonLat([parseFloat(longitude), parseFloat(latitude)]);
+        this.map.getView().animate({center: coords, zoom: 14});
     }
 
-    addMapPoint(lat, lng) {
+    addMapPoint(latitude, longitude) {
         const vectorLayer = new ol.layer.Vector({
             source: new ol.source.Vector({
                 features: [new ol.Feature({
-                    geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
+                    geometry: new ol.geom.Point(ol.proj.transform([parseFloat(longitude), parseFloat(latitude)], 'EPSG:4326', 'EPSG:3857')),
                 })]
             }),
             style: new ol.style.Style({
