@@ -25,7 +25,8 @@ export class ApiService {
         this.httpOptions.headers = new HttpHeaders({
             'Content-Type':  'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Accept': 'application/json, text/plain, */*'
+            'Accept': 'application/json, text/plain, */*',
+            'X-Requested-With': 'XMLHttpRequest'
         });
     }
 
@@ -36,9 +37,9 @@ export class ApiService {
 
     savePointOfInterest(name, latitude, longitude): Observable<PointOfInterest> {
         return this.http.post(this.endpoint + 'poi', {
-            name: name,
-            latitude: latitude,
-            longitude: longitude
+            'name': name,
+            'latitude': latitude,
+            'longitude': longitude
         }, this.httpOptions).pipe(
             map(this.extractData));
     }

@@ -32,12 +32,12 @@ export class AppComponent implements OnInit {
                 ],
                 view: new ol.View({
                     center: ol.proj.fromLonLat([44.406161, 33.282384]),
-                    zoom: 8
+                    zoom: 12
                 })
             });
 
             this.dataSource.forEach(poi => {
-                this.addMapPoint(poi.latitude, poi.longitude);
+                this.addMapPoint(poi.name, poi.latitude, poi.longitude);
             });
         });
 
@@ -54,16 +54,16 @@ export class AppComponent implements OnInit {
                     this.apiService.getPointOfInterests().subscribe((pois) => {
                         this.dataSource = pois;
                     });
-                    this.addMapPoint(this.latitude, this.longitude);
+                    this.addMapPoint(this.name, this.latitude, this.longitude);
                 });
     }
 
-    setCenter(latitude, longitude) {
+    setCenter(name, latitude, longitude) {
         const coords = ol.proj.fromLonLat([parseFloat(longitude), parseFloat(latitude)]);
-        this.map.getView().animate({center: coords, zoom: 14});
+        this.map.getView().animate({center: coords, zoom: 15});
     }
 
-    addMapPoint(latitude, longitude) {
+    addMapPoint(name, latitude, longitude) {
         const vectorLayer = new ol.layer.Vector({
             source: new ol.source.Vector({
                 features: [new ol.Feature({
@@ -72,10 +72,18 @@ export class AppComponent implements OnInit {
             }),
             style: new ol.style.Style({
                 image: new ol.style.Icon({
-                    anchor: [0.5, 0.5],
+                    anchor: [1, 1],
                     anchorXUnits: 'fraction',
                     anchorYUnits: 'fraction',
                     src: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg'
+                }),
+                text: new ol.style.Text({
+                    font: '12px Calibri,sans-serif',
+                    fill: new ol.style.Fill({ color: '#000' }),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff', width: 2
+                    }),
+                    text: name
                 })
             })
         });
