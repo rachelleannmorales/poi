@@ -16,11 +16,6 @@ export class ApiService {
     };
     constructor(private http: HttpClient) { }
 
-    private extractData(res: Response) {
-        let body = null;
-        body = res;
-        return body.map((poi) => new PointOfInterest(poi));
-    }
     setHttpHeaders() {
         this.httpOptions.headers = new HttpHeaders({
             'Content-Type':  'application/json',
@@ -32,7 +27,11 @@ export class ApiService {
 
     getPointOfInterests(params?): Observable<PointOfInterest[]> {
         return this.http.get(this.endpoint + 'pois', this.httpOptions).pipe(
-            map(this.extractData));
+            map(r => {
+                let body = null;
+                body = r;
+                return body.map((poi) => new PointOfInterest(poi));
+            }));
     }
 
     savePointOfInterest(name, latitude, longitude): Observable<PointOfInterest> {
@@ -41,6 +40,10 @@ export class ApiService {
             'latitude': latitude,
             'longitude': longitude
         }, this.httpOptions).pipe(
-            map(this.extractData));
+            map(r => {
+                let body = null;
+                body = r;
+                return new PointOfInterest(body);
+            }));
     }
 }
